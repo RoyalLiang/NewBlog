@@ -44,8 +44,14 @@ class BlogModel(BaseModel):
     cover = models.CharField(max_length=200, default='', blank=True, null=True, verbose_name='封面')
     author = models.CharField(max_length=30, db_index=True, verbose_name='作者')
     summary = models.CharField(max_length=500, null=True, blank=True, verbose_name='摘要')
-    tags = models.ManyToManyField(LabelModel, related_name='tag_blog', through='BlogRefTagModel', verbose_name='标签')
-    categories = models.ManyToManyField(LabelModel, related_name='cat_blog', through='BlogRefCategoryModel', verbose_name='类别')
+    tags = models.ManyToManyField(
+        LabelModel, related_name='tag_blog', through='BlogRefTagModel',
+        through_fields=('blog', 'tag'), verbose_name='标签'
+    )
+    categories = models.ManyToManyField(
+        LabelModel, related_name='cat_blog', through='BlogRefCategoryModel',
+        through_fields=('blog', 'category'), verbose_name='类别'
+    )
     content = models.TextField(null=False, verbose_name='内容')
     status = models.SmallIntegerField(default=0, choices=STATUS, verbose_name='状态')
     read = models.IntegerField(default=0, verbose_name='阅读数')
@@ -63,7 +69,7 @@ class BlogModel(BaseModel):
 
 class BlogRefTagModel(BaseModel):
     blog = models.ForeignKey(BlogModel, on_delete=models.CASCADE, db_constraint=False)
-    tag = models.ForeignKey(LabelModel, on_delete=models.CASCADE, db_constraint=False)
+    tag = models.ForeignKey(LabelModel, on_delete=models.CASCADE, db_constraint=False, verbose_name='标签')
 
     class Meta:
         db_table = 'blog_ref_tag'
@@ -76,7 +82,7 @@ class BlogRefTagModel(BaseModel):
 
 class BlogRefCategoryModel(BaseModel):
     blog = models.ForeignKey(BlogModel, on_delete=models.CASCADE, db_constraint=False)
-    category = models.ForeignKey(LabelModel, on_delete=models.CASCADE, db_constraint=False)
+    category = models.ForeignKey(LabelModel, on_delete=models.CASCADE, db_constraint=False, verbose_name='类别')
 
     class Meta:
         db_table = 'blog_ref_category'
