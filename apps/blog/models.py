@@ -1,6 +1,8 @@
 from django.db import models
 
 # Create your models here.
+from mdeditor.fields import MDTextField
+
 from extra.base.model import BaseModel
 
 
@@ -46,13 +48,13 @@ class BlogModel(BaseModel):
     summary = models.CharField(max_length=500, null=True, blank=True, verbose_name='摘要')
     tags = models.ManyToManyField(
         LabelModel, related_name='tag_blog', through='BlogRefTagModel',
-        through_fields=('blog', 'tag'), verbose_name='标签'
+        through_fields=('blog', 'tag'), verbose_name='标签', blank=True
     )
     categories = models.ManyToManyField(
         LabelModel, related_name='cat_blog', through='BlogRefCategoryModel',
-        through_fields=('blog', 'category'), verbose_name='类别'
+        through_fields=('blog', 'category'), verbose_name='类别', blank=True
     )
-    content = models.TextField(null=False, verbose_name='内容')
+    content = MDTextField(verbose_name='内容')
     status = models.SmallIntegerField(default=0, choices=STATUS, verbose_name='状态')
     read = models.IntegerField(default=0, verbose_name='阅读数')
     comment = models.IntegerField(default=0, verbose_name='评论数')
