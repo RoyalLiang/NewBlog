@@ -3,7 +3,7 @@ from django.db import models
 # Create your models here.
 from mdeditor.fields import MDTextField
 
-from extra.base.model import BaseModel
+from extra.base.models import BaseModel
 
 
 class LabelModel(BaseModel):
@@ -32,6 +32,9 @@ class LabelModel(BaseModel):
 
     def __str__(self):
         return self.name
+
+    def dict(self):
+        return dict(name=self.name, cover=self.cover, desc=self.desc)
 
 
 class BlogModel(BaseModel):
@@ -67,6 +70,26 @@ class BlogModel(BaseModel):
 
     def __str__(self):
         return self.title
+
+    def dict(self):
+        return dict(
+            title=self.title, cover=self.cover, summary=self.summary, author=self.author,
+            tag=self._get_label(cat=1), category=self._get_label(cat=2)
+        )
+
+    @classmethod
+    def list(cls, query, page=1, page_size=20, **kwargs):
+        articles = cls.paginate(cls.get_list(query=query), page, page_size)
+        r = [a.dict() for a in articles]
+        return r
+
+    def _get_label(self, cat):
+        if cat == 1:
+            return [t.dict() for t in self.tags.all()]
+        elif cat == 2:
+            return [c.dict() for c in self.categories.all()]
+        else:
+            return []
 
 
 class BlogRefTagModel(BaseModel):

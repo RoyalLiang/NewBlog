@@ -10,3 +10,9 @@ class StatusEnum(enum.IntEnum):
 class LabelEnum(enum.IntEnum):
     TAG = 1
     CATEGORY = 2
+
+
+class ResponseCodeEnum(enum.IntEnum):
+    SYS_ERROR = -10000
+    SUCCESS = 10000
+
