@@ -29,6 +29,8 @@ class BaseModel(models.Model):
     @classmethod
     def paginate(cls, queryset, page, page_size):
         items = Paginator(queryset, page_size)
+        if items.num_pages < page:
+            return []
         return items.page(page)
 
 

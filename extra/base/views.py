@@ -11,19 +11,28 @@ from loguru import logger
 
 class BaseView(View):
     def dispatch(self, request, *args, **kwargs):
-        logger.info(f"origin request args: {request.META}")
+        param_dict = request.META
+        log_params = dict(
+            path=param_dict.get('PATH_INFO'), query=param_dict.get('QUERY_STRING'), remote=param_dict.get('REMOTE_ADDR'),
+            body=request.body.decode()
+        )
+        self._log_info(f'get request msg: {log_params}')
         return super().dispatch(request, *args, **kwargs)
 
     @staticmethod
     def response(code=ResponseCodeEnum.SUCCESS, msg='success', data=None):
         r = dict(result=code, msg=msg)
-        if data:
+        if data is not None:
             r['data'] = data
         return JsonResponse(r)
 
     @staticmethod
     def _log_error(error):
         logger.info(error)
+
+    @staticmethod
+    def _log_info(info):
+        logger.info(info)
 
 
 class BasePostView(BaseView):
