@@ -16,7 +16,16 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
+from blog.views import CommonView, CategoryListView, TagListView, BlogListView
+
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/', include('blog.urls', namespace='blog'))
+    path('api/', include('blog.urls', namespace='blog')),
+    path('option', CommonView.as_view()),
+    path('disqus/config', CommonView.as_view()),
+    path('category', CategoryListView.as_view(), name='category'),
+    path('tag/all', TagListView.as_view(), name='tag'),
+    path('article/hottest', BlogListView.as_view(), name='aHot'),
+    path('article', BlogListView.as_view(), name='article'),
+
 ]

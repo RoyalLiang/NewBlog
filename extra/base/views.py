@@ -21,7 +21,7 @@ class BaseView(View):
 
     @staticmethod
     def response(code=ResponseCodeEnum.SUCCESS, msg='success', data=None):
-        r = dict(result=code, msg=msg)
+        r = dict(result=code, message=msg)
         if data is not None:
             r['data'] = data
         return JsonResponse(r)
@@ -52,10 +52,14 @@ class BasePostView(BaseView):
 
 class BaseGetView(BaseView):
     args = None
+    page = None
+    page_size = None
 
     def get(self, request):
         try:
             self.args = request.GET
+            self.page = int(self.args.get('page', 1))
+            self.page_size = int(self.args.get('pageSize', 20))
             return self._process(request)
         except Exception:
             self._log_error(f"get request error, msg: {traceback.format_exc()}")

@@ -3,6 +3,7 @@ from django.db import models
 # Create your models here.
 from mdeditor.fields import MDTextField
 
+from extra.base.enums import LabelEnum
 from extra.base.models import BaseModel
 
 
@@ -34,7 +35,17 @@ class LabelModel(BaseModel):
         return self.name
 
     def dict(self):
-        return dict(name=self.name, cover=self.cover, desc=self.desc)
+        return dict(id=self.id, name=self.name, cover=self.cover, desc=self.desc)
+
+    @classmethod
+    def list(cls, page, page_size, cat, query=None, **kwargs):
+        if query:
+            query.update({'cat': LabelEnum[cat]})
+        else:
+            query = {'cat': LabelEnum[cat]}
+        labels = cls.get_list(query)
+        r = [l.dict() for l in labels]
+        return r
 
 
 class BlogModel(BaseModel):
@@ -73,7 +84,7 @@ class BlogModel(BaseModel):
 
     def dict(self):
         return dict(
-            title=self.title, cover=self.cover, summary=self.summary, author=self.author,
+            id=self.id, title=self.title, cover=self.cover, summary=self.summary, author=self.author,
             tag=self._get_label(cat=1), category=self._get_label(cat=2)
         )
 
