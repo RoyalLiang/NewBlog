@@ -87,8 +87,10 @@ class BlogModel(BaseModel):
 
     def dict(self):
         return dict(
-            id=self.id, title=self.title, cover=self.cover, summary=self.summary, author=self.author,
-            tag=self._get_label(cat=1), category=self._get_label(cat=2), create_at=str(self.create_time).split('.', 1)[0]
+            id=self.id, slug='peace-and-love', title=self.title, thumb=self.cover, description=self.summary, author=self.author,
+            tag=self._get_label(cat=1), category=self._get_label(cat=2), create_at=str(self.create_time),
+            keywords=['ddd'], state=self.status, public=self.status, origin=0, lang='zh', update_at=str(self.update_time),
+            extends=[], meta=dict(likes=0, views=0, comments=0)
         )
 
     @classmethod

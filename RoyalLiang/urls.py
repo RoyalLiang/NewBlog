@@ -17,7 +17,7 @@ from django.contrib import admin
 from django.urls import path, include
 
 from blog.views import CommonView, CategoryListView, TagListView, BlogListView, CalendarView, HotBlogListView, \
-    ConfigView, OptionView
+    ConfigView, OptionView, BlogDetailView, BlogContextView, CommentView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -28,6 +28,9 @@ urlpatterns = [
     path('tag/all', TagListView.as_view(), name='tag'),
     path('article/hottest', HotBlogListView.as_view(), name='aHot'),
     path('article', BlogListView.as_view(), name='article'),
+    path('article/<int:pid>', BlogDetailView.as_view(), name='articleDetail'),
+    path('article/<int:pid>/context', BlogContextView.as_view(), name='articleDetailContext'),
     path('article/calendar', CalendarView.as_view(), name='calendar'),
+    path('comment', CommentView.as_view(), name='comment'),
 
 ]
