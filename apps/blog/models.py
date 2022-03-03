@@ -35,7 +35,10 @@ class LabelModel(BaseModel):
         return self.name
 
     def dict(self):
-        return dict(id=self.id, name=self.name, cover=self.cover, desc=self.desc)
+        return dict(
+            id=self.id, name=self.name, cover=self.cover, description=self.desc, create_at=str(self.create_time),
+            extends=[{'name': "icon", 'value': "icon-taichi"}], articles_count=1, slug='ddd'
+        )
 
     @classmethod
     def list(cls, page, page_size, cat, query=None, **kwargs):
@@ -85,7 +88,7 @@ class BlogModel(BaseModel):
     def dict(self):
         return dict(
             id=self.id, title=self.title, cover=self.cover, summary=self.summary, author=self.author,
-            tag=self._get_label(cat=1), category=self._get_label(cat=2)
+            tag=self._get_label(cat=1), category=self._get_label(cat=2), create_at=str(self.create_time).split('.', 1)[0]
         )
 
     @classmethod

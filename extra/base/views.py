@@ -10,20 +10,22 @@ from loguru import logger
 
 
 class BaseView(View):
+    uri = None
+
     def dispatch(self, request, *args, **kwargs):
         param_dict = request.META
         log_params = dict(
             path=param_dict.get('PATH_INFO'), query=param_dict.get('QUERY_STRING'), remote=param_dict.get('REMOTE_ADDR'),
             body=request.body.decode()
         )
+        self.uri = log_params['path']
         self._log_info(f'get request msg: {log_params}')
         return super().dispatch(request, *args, **kwargs)
 
-    @staticmethod
-    def response(code=ResponseCodeEnum.SUCCESS, msg='success', data=None):
-        r = dict(result=code, message=msg)
+    def response(self, code=ResponseCodeEnum.SUCCESS, msg='success', data=None):
+        r = dict(status='success', message=msg, result={}, params={'isAuthenticated': False, 'url': self.uri, 'isUnauthenticated': True, 'method': "GET", 'routes': {}})
         if data is not None:
-            r['data'] = data
+            r['result'] = data
         return JsonResponse(r)
 
     @staticmethod
