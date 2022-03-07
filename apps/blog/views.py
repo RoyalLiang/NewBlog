@@ -109,7 +109,7 @@ class CommentView(BaseGetView):
                 "__v":0
             }
         """
-        p = {'total': 0, 'current_page': 0, 'per_page': 0, 'total_page': 0}
+        p = {'total': 0, 'current_page': 1, 'per_page': 50, 'total_page': 1}
         r = dict(data=[], pagination=p)
         return self.response(data=r)
 
@@ -127,8 +127,8 @@ class CategoryListView(BaseGetView):
         if self.page <= 0 or self.page_size <= 0:
             return self.response()
         cats = LabelModel.list(self.page, self.page_size, cat='CATEGORY')
-        p = {'total': 0, 'current_page': 1, 'per_page': 1, 'total_page': 1}
-        return self.response(data={'data': [], 'pagination': p})
+        p = {'total': 1, 'current_page': 1, 'per_page': 1, 'total_page': 1}
+        return self.response(data={'data': cats, 'pagination': p})
 
 
 class TagListView(BaseGetView):

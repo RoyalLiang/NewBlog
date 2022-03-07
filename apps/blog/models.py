@@ -36,7 +36,7 @@ class LabelModel(BaseModel):
 
     def dict(self):
         return dict(
-            id=self.id, name=self.name, cover=self.cover, description=self.desc, create_at=str(self.create_time),
+            id=self.id, name=self.name, thumb=self.cover, description=self.desc, create_at=str(self.create_time),
             extends=[{'name': "icon", 'value': "icon-taichi"}], articles_count=1, slug='ddd'
         )
 
