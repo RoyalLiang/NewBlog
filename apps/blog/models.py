@@ -85,18 +85,21 @@ class BlogModel(BaseModel):
     def __str__(self):
         return self.title
 
-    def dict(self):
-        return dict(
+    def dict(self, detail=False):
+        r = dict(
             id=self.id, slug='peace-and-love', title=self.title, thumb=self.cover, description=self.summary, author=self.author,
             tag=self._get_label(cat=1), category=self._get_label(cat=2), create_at=str(self.create_time),
             keywords=['ddd'], state=self.status, public=self.status, origin=0, lang='zh', update_at=str(self.update_time),
             extends=[], meta=dict(likes=0, views=0, comments=0)
         )
+        if detail:
+            r['content'] = self.content
+        return r
 
     @classmethod
-    def list(cls, query, page=1, page_size=20, **kwargs):
+    def list(cls, query, page=1, page_size=20, detail=False, **kwargs):
         articles = cls.paginate(cls.get_list(query=query), page, page_size)
-        r = [a.dict() for a in articles]
+        r = [a.dict(detail) for a in articles]
         return r
 
     def _get_label(self, cat):

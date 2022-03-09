@@ -44,7 +44,7 @@ class BlogListView(BaseGetView):
 class BlogDetailView(BaseGetView):
 
     def get(self, request, pid):
-        articles = BlogModel.list({'id': pid})
+        articles = BlogModel.list({'id': pid}, detail=True)
         if articles:
             article = articles[0]
         else:
