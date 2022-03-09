@@ -34,10 +34,10 @@ class LabelModel(BaseModel):
     def __str__(self):
         return self.name
 
-    def dict(self):
+    def dict(self, cat='tag'):
         return dict(
             id=self.id, name=self.name, thumb=self.cover, description=self.desc, create_at=str(self.create_time),
-            extends=[{'name': "icon", 'value': "icon-taichi"}], articles_count=1, slug='ddd'
+            extends=[{'name': "icon", 'value': "icon-taichi"}], articles_count=getattr(self, f'{cat}_blog').count(), slug='ddd'
         )
 
     @classmethod
@@ -94,6 +94,8 @@ class BlogModel(BaseModel):
         )
         if detail:
             r['content'] = self.content
+            self.read += 1
+            self.save(update_fields=['read'])
         return r
 
     @classmethod
