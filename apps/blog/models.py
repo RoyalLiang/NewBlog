@@ -21,8 +21,9 @@ class LabelModel(BaseModel):
     ]
 
     name = models.CharField(max_length=30, db_index=True, verbose_name='名称')
-    cover = models.CharField(max_length=200, default='', null=True, blank=True, verbose_name='封面')
+    cover = models.ImageField(max_length=200, upload_to='label', null=True, blank=True, verbose_name='封面')
     desc = models.CharField(max_length=300, null=True, blank=True, verbose_name='描述')
+    slogan = models.CharField(max_length=30, verbose_name='标语')
     cat = models.SmallIntegerField(choices=CAT, db_index=True, verbose_name='类别')
     status = models.SmallIntegerField(choices=STATUS, db_index=True, default=0, verbose_name='状态')
 
@@ -36,7 +37,7 @@ class LabelModel(BaseModel):
 
     def dict(self, cat='tag'):
         return dict(
-            id=self.id, name=self.name, thumb=self.cover, description=self.desc, create_at=str(self.create_time),
+            id=self.id, name=self.name, thumb=self.cover.url if self.cover else '', description=self.desc, create_at=str(self.create_time),
             extends=[{'name': "icon", 'value': "icon-taichi"}], articles_count=getattr(self, f'{cat}_blog').count(), slug='ddd'
         )
 
@@ -59,8 +60,10 @@ class BlogModel(BaseModel):
         (1, '已发布')
     ]
 
+    BASE_URL = 'https://royalliang.oss-cn-shanghai.aliyuncs.com'
+
     title = models.CharField(max_length=50, db_index=True, unique=True, verbose_name='标题')
-    cover = models.CharField(max_length=200, default='', blank=True, null=True, verbose_name='封面')
+    cover = models.ImageField(upload_to='blog', max_length=200, blank=True, null=True, verbose_name='封面')
     author = models.CharField(max_length=30, db_index=True, verbose_name='作者')
     summary = models.CharField(max_length=500, null=True, blank=True, verbose_name='摘要')
     tags = models.ManyToManyField(
@@ -87,10 +90,11 @@ class BlogModel(BaseModel):
 
     def dict(self, detail=False):
         r = dict(
-            id=self.id, slug='peace-and-love', title=self.title, thumb=self.cover, description=self.summary, author=self.author,
+            id=self.id, slug='peace-and-love', title=self.title, thumb=self.cover.url if self.cover else '',
+            description=self.summary, author=self.author,
             tag=self._get_label(cat=1), category=self._get_label(cat=2), create_at=str(self.create_time),
             keywords=['ddd'], state=self.status, public=self.status, origin=0, lang='zh', update_at=str(self.update_time),
-            extends=[], meta=dict(likes=0, views=0, comments=0)
+            extends=[], meta=dict(likes=self.like, views=self.read, comments=self.comment)
         )
         if detail:
             r['content'] = self.content

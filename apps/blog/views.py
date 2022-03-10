@@ -41,6 +41,10 @@ class BlogListView(BaseGetView):
         return self.response(data={'data': articles, 'pagination': p})
 
 
+class HotBlogView(BaseGetView):
+    pass
+
+
 class BlogDetailView(BaseGetView):
 
     def get(self, request, pid):
