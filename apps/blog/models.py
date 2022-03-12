@@ -23,7 +23,7 @@ class LabelModel(BaseModel):
     name = models.CharField(max_length=30, db_index=True, verbose_name='名称')
     cover = models.ImageField(max_length=200, upload_to='label', null=True, blank=True, verbose_name='封面')
     desc = models.CharField(max_length=300, null=True, blank=True, verbose_name='描述')
-    slogan = models.CharField(max_length=30, verbose_name='标语')
+    slogan = models.CharField(max_length=30, default='', verbose_name='标语')
     cat = models.SmallIntegerField(choices=CAT, db_index=True, verbose_name='类别')
     status = models.SmallIntegerField(choices=STATUS, db_index=True, default=0, verbose_name='状态')
 
