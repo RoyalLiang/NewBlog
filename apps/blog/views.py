@@ -5,7 +5,9 @@ from django.shortcuts import render
 from django.views import View
 
 from blog.models import BlogModel, LabelModel
+from comments.models import ArticleCommentModel
 from extra.base.views import BaseView, BaseGetView
+from extra.decorate import catch_page
 
 
 class CommonView(BaseGetView):
@@ -33,9 +35,8 @@ class OptionView(BaseGetView):
 
 class BlogListView(BaseGetView):
 
+    @catch_page
     def _process(self, request, *args, **kwargs):
-        if self.page <= 0 or self.page_size <= 0:
-            return self.response()
         articles = BlogModel.list({}, self.page, self.page_size)
         p = {'total': 1, 'current_page': 1, 'per_page': 1, 'total_page': 1}
         return self.response(data={'data': articles, 'pagination': p})
@@ -114,7 +115,35 @@ class CommentView(BaseGetView):
             }
         """
         p = {'total': 0, 'current_page': 1, 'per_page': 50, 'total_page': 1}
-        r = dict(data=[], pagination=p)
+        comments = ArticleCommentModel.objects.all()
+        r = [{
+            'id': i.pk,
+            'post_id': i.blog.pk,
+            'content': i.content,
+            'pid': i.pid,
+            'agent': '',
+            'create_at': str(i.create_time),
+            'author': {
+                'name': i.nickname,
+                'email': i.email,
+                'site': ''
+            },
+            "state": 1,
+            "likes": 0,
+            "dislikes": 0,
+            "ip_location": {
+                "country": "China",
+                "country_code": "CN",
+                "region": "Shanghai",
+                "region_code": "SH",
+                "city": "Pudong",
+                "zip": ""
+            },
+            'extends': []
+
+
+        } for i in comments]
+        r = dict(data=r, pagination=p)
         return self.response(data=r)
 
 

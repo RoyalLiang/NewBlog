@@ -18,6 +18,7 @@ from django.urls import path, include
 
 from blog.views import CommonView, CategoryListView, TagListView, BlogListView, CalendarView, HotBlogListView, \
     ConfigView, OptionView, BlogDetailView, BlogContextView, CommentView
+from comments.views import PostCommentView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -32,5 +33,7 @@ urlpatterns = [
     path('article/<int:pid>/context', BlogContextView.as_view(), name='articleDetailContext'),
     path('article/calendar', CalendarView.as_view(), name='calendar'),
     path('comment', CommentView.as_view(), name='comment'),
+    path('disqus/comment', PostCommentView.as_view(), name='postComment'),
+    path('vote/comment', '', name='voteComment'),
 
 ]
