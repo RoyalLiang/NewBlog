@@ -5,6 +5,7 @@ from loguru import logger
 from comments.models import ArticleCommentModel
 from extra.base.views import BasePostView, BaseGetView
 from extra.decorate import catch_page
+from extra.base.views import BasePostView
 
 
 class PostCommentView(BasePostView):
