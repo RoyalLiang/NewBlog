@@ -17,7 +17,7 @@ from django.contrib import admin
 from django.urls import path, include
 
 from blog.views import CommonView, CategoryListView, TagListView, BlogListView, CalendarView, HotBlogListView, \
-    ConfigView, OptionView, BlogDetailView, BlogContextView
+    ConfigView, OptionView, BlogDetailView, BlogContextView, AuthorView
 from comments.views import PostCommentView, CommentView
 
 urlpatterns = [
@@ -35,5 +35,6 @@ urlpatterns = [
     path('comment', CommentView.as_view(), name='comment'),
     path('disqus/comment', PostCommentView.as_view(), name='postComment'),
     # path('vote/comment', '', name='voteComment'),
+    path('auth/admin', AuthorView.as_view(), name='author')
 
 ]

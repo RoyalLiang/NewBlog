@@ -23,7 +23,7 @@ class ArticleCommentModel(BaseModel):
         verbose_name = '评论管理'
         verbose_name_plural = verbose_name
 
-    def dict(self, **kwargs):
+    def dict(self, detail=False, **kwargs):
         return dict(
             id=self.id, content=self.content, agent='', author=dict(name=self.nickname, email=self.email, site=''),
             extends=[], state=self.status, likes=self.likes, dislikes=self.dislikes, create_at=str(self.create_time),

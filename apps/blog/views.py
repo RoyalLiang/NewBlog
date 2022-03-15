@@ -178,3 +178,10 @@ class CalendarView(BaseGetView):
     def _process(self, request, *args, **kwargs):
         resp = [{'count': 1, 'date': "2022-02-18"}]
         return self.response(data=resp, msg='Get article calendar succeed')
+
+
+class AuthorView(BaseGetView):
+
+    def _process(self, request, *args, **kwargs):
+        r = {"slogan":"Engineer / Freelancer / Digital nomad / 前端表演技术家 / 伏特加战士 / 海底捞之王","name":"Surmon","__v":0,"avatar":"https://cdn.surmon.me/_proxy/default/https%3A%2F%2Fwww.gravatar.com%2Favatar%2Ffa6719aa3cb274e29e9bec58459e8425%3Fs%3D360"}
+        return self.response(data=r)
