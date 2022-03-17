@@ -22,7 +22,7 @@ class CommonView(BaseGetView):
 class ConfigView(BaseGetView):
 
     def _process(self, request, *args, **kwargs):
-        # r = {"forum":"surmon","admin_username":"surmon","public_key":"DDGPXhaD8thUpRxLCZIXtT9cOC2tiKkYVp2dzsspGpBHZ4iIrHxNrDUF5o1jRqmN","authorize_url":"https://disqus.com/api/oauth/2.0/authorize?client_id=DDGPXhaD8thUpRxLCZIXtT9cOC2tiKkYVp2dzsspGpBHZ4iIrHxNrDUF5o1jRqmN&response_type=code&scope=read%2Cwrite&redirect_uri=https%3A%2F%2Fapi.surmon.me%2Fdisqus%2Foauth-callback"}
+        # r = {"forum":"RoyalLiang","admin_username":"RoyalLiang","public_key":"","authorize_url":""}
         return self.response()
 
 
@@ -191,5 +191,5 @@ class VoteBlogView(BasePostView):
 
     def _process(self, request, *args, **kwargs):
         blog = BlogModel.vote(self.req['article_id'], vote=self.req['vote'])
-        r = dict(likes=blog.like)
+        r = blog.like
         return self.response(data=r)
