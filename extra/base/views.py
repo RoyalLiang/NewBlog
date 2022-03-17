@@ -11,6 +11,7 @@ from loguru import logger
 
 class BaseView(View):
     uri = None
+    logger = logger
 
     def dispatch(self, request, *args, **kwargs):
         param_dict = request.META

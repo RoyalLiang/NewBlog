@@ -6,7 +6,7 @@ from django.views import View
 
 from blog.models import BlogModel, LabelModel
 from comments.models import ArticleCommentModel
-from extra.base.views import BaseView, BaseGetView
+from extra.base.views import BaseView, BaseGetView, BasePostView
 from extra.decorate import catch_page
 
 
@@ -22,8 +22,8 @@ class CommonView(BaseGetView):
 class ConfigView(BaseGetView):
 
     def _process(self, request, *args, **kwargs):
-        r = {"forum":"surmon","admin_username":"surmon","public_key":"DDGPXhaD8thUpRxLCZIXtT9cOC2tiKkYVp2dzsspGpBHZ4iIrHxNrDUF5o1jRqmN","authorize_url":"https://disqus.com/api/oauth/2.0/authorize?client_id=DDGPXhaD8thUpRxLCZIXtT9cOC2tiKkYVp2dzsspGpBHZ4iIrHxNrDUF5o1jRqmN&response_type=code&scope=read%2Cwrite&redirect_uri=https%3A%2F%2Fapi.surmon.me%2Fdisqus%2Foauth-callback"}
-        return self.response(data=r)
+        # r = {"forum":"surmon","admin_username":"surmon","public_key":"DDGPXhaD8thUpRxLCZIXtT9cOC2tiKkYVp2dzsspGpBHZ4iIrHxNrDUF5o1jRqmN","authorize_url":"https://disqus.com/api/oauth/2.0/authorize?client_id=DDGPXhaD8thUpRxLCZIXtT9cOC2tiKkYVp2dzsspGpBHZ4iIrHxNrDUF5o1jRqmN&response_type=code&scope=read%2Cwrite&redirect_uri=https%3A%2F%2Fapi.surmon.me%2Fdisqus%2Foauth-callback"}
+        return self.response()
 
 
 class OptionView(BaseGetView):
@@ -184,4 +184,12 @@ class AuthorView(BaseGetView):
 
     def _process(self, request, *args, **kwargs):
         r = {"slogan":"Engineer / Freelancer / Digital nomad / 前端表演技术家 / 伏特加战士 / 海底捞之王","name":"Surmon","__v":0,"avatar":"https://cdn.surmon.me/_proxy/default/https%3A%2F%2Fwww.gravatar.com%2Favatar%2Ffa6719aa3cb274e29e9bec58459e8425%3Fs%3D360"}
+        return self.response(data=r)
+
+
+class VoteBlogView(BasePostView):
+
+    def _process(self, request, *args, **kwargs):
+        blog = BlogModel.vote(self.req['article_id'], vote=self.req['vote'])
+        r = dict(likes=blog.like)
         return self.response(data=r)

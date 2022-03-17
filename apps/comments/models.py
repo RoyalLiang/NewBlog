@@ -4,6 +4,7 @@ from mdeditor.fields import MDTextField
 
 # Create your models here.
 from blog.models import BlogModel
+from extra.base.enums import VoteTypeEnum
 from extra.base.models import BaseModel
 
 
@@ -44,3 +45,14 @@ class ArticleCommentModel(BaseModel):
         r = [c.dict(detail) for c in comments]
         return r
 
+    @classmethod
+    def vote_comment(cls, comment_id, vote, **kwargs):
+        comment = cls.objects.get(pk=comment_id)
+        if vote == VoteTypeEnum.LIKE:
+            comment.likes += 1
+        elif vote == VoteTypeEnum.DISLIKE:
+            comment.dislikes += 1
+        else:
+            return comment, False
+        comment.save(update_fields=['likes', 'dislikes'])
+        return comment, True

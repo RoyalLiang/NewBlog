@@ -3,7 +3,7 @@ from django.db import models
 # Create your models here.
 from mdeditor.fields import MDTextField
 
-from extra.base.enums import LabelEnum
+from extra.base.enums import LabelEnum, VoteTypeEnum
 from extra.base.models import BaseModel
 
 
@@ -107,6 +107,14 @@ class BlogModel(BaseModel):
         articles = cls.paginate(cls.get_list(query=query), page, page_size)
         r = [a.dict(detail) for a in articles]
         return r
+
+    @classmethod
+    def vote(cls, blog_id, vote, **kwargs):
+        blog = cls.objects.get(pk=blog_id)
+        if vote == VoteTypeEnum.LIKE:
+            blog.like += 1
+            blog.save(update_fields=['like'])
+        return blog
 
     def _get_label(self, cat):
         if cat == 1:

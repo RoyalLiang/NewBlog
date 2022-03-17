@@ -16,3 +16,7 @@ class ResponseCodeEnum(enum.IntEnum):
     SYS_ERROR = -10000
     SUCCESS = 10000
 
+
+class VoteTypeEnum(enum.IntEnum):
+    LIKE = 1
+    DISLIKE = -1
